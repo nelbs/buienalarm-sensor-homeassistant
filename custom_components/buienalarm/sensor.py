@@ -43,6 +43,7 @@ SENSOR_TYPES = {
         "mdi:weather-pouring",
     ],
     "next_rain_forecast": ["Next rain forecast", "minutes", "mdi:weather-pouring"],
+    "precipitation_forecast_intensity": ["Precipitation forecast intensity", None, "mdi:weather-pouring"],
 }
 
 CONF_TIMEFRAME = "timeframe"
@@ -160,6 +161,24 @@ class BaSensor(Entity):
             else:
                 self._state = next_rain_minutes
 
+        elif self.type == "precipitation_forecast_intensity":
+            if self.ba_data.precipitation_forecast_average <= 0.1:
+                self._state = "Geen neerslag"
+                self._icon = "mdi:weather-cloudy"
+            elif self.ba_data.precipitation_forecast_average <= 1.0:
+                self._state = "Lichte neerslag"
+                self._icon = "mdi:weather-rainy"              
+            elif self.ba_data.precipitation_forecast_average <= 3.0:
+                self._state = "Matige neerslag"
+                self._icon = "mdi:weather-rainy"  
+            elif self.ba_data.precipitation_forecast_average <= 10:
+                self._state = "Zware neerslag"
+                self._icon = "mdi:weather-pouring"  
+            elif self.ba_data.precipitation_forecast_average > 10:
+                self._state = "Zware buiten"
+                self._icon = "mdi:weather-pouring"  
+            else:
+                self._state = None
 
 class BuienalarmData:
     """The data from buienalarm."""
