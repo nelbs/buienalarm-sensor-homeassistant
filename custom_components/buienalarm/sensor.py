@@ -162,19 +162,20 @@ class BaSensor(Entity):
                 self._state = next_rain_minutes
 
         elif self.type == "precipitation_forecast_intensity":
-            if self.ba_data.precipitation_forecast_average <= 0.1:
+            intensity = self.ba_data.precipitation_forecast_average
+            if intensity <= 0.1:
                 self._state = "Geen neerslag"
                 self._icon = "mdi:weather-cloudy"
-            elif self.ba_data.precipitation_forecast_average <= 1.0:
+            elif 0.1 < intensity <= 1.0:
                 self._state = "Lichte neerslag"
                 self._icon = "mdi:weather-rainy"              
-            elif self.ba_data.precipitation_forecast_average <= 3.0:
+            elif 1.0 < intensity <= 3.0:
                 self._state = "Matige neerslag"
                 self._icon = "mdi:weather-rainy"  
-            elif self.ba_data.precipitation_forecast_average <= 10:
+            elif 3.0 < intensity <= 10:
                 self._state = "Zware neerslag"
                 self._icon = "mdi:weather-pouring"  
-            elif self.ba_data.precipitation_forecast_average > 10:
+            elif intensity > 10:
                 self._state = "Zware buiten"
                 self._icon = "mdi:weather-pouring"  
             else:
