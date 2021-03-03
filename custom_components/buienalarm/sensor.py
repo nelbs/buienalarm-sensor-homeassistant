@@ -121,12 +121,11 @@ class BaSensor(Entity):
     def icon(self):
         """Return icon."""
         return self._icon
-
+    
     @property
     def device_state_attributes(self):
         """Return the state attributes."""
         attr = {}
-        attr[ATTR_ATTRIBUTION] = ATTRIBUTION
         if not self.type.find("forecast") == -1:
             attr[CONF_TIMEFRAME] = self.ba_data.timeframe
 
@@ -156,10 +155,7 @@ class BaSensor(Entity):
                 if precip > 0:
                     next_rain_minutes = 5 * periods
                     break
-            if next_rain_minutes == -1:
-                self._state = None
-            else:
-                self._state = next_rain_minutes
+            self._state = next_rain_minutes
 
         elif self.type == "precipitation_forecast_intensity":
             intensity = self.ba_data.precipitation_forecast_average
